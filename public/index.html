@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Care Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #07192f 0%, #0a1e35 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: #07192f;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #33e0c4;
+        }
+        
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #33e0c4;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: rgba(51, 224, 196, 0.1);
+            border-radius: 8px;
+            padding: 4px;
+        }
+        
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .nav-tab.active {
+            background: #33e0c4;
+            color: #07192f;
+            font-weight: 600;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .main-content {
+            display: none;
+        }
+        
+        .main-content.active {
+            display: block;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #33e0c4;
+        }
+        
+        .metric {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffca58;
+        }
+        
+        .form-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #33e0c4;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            font-weight: 500;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+        
+        input, textarea, select {
+            padding: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #33e0c4;
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #33e0c4;
+            color: #07192f;
+        }
+        
+        .btn-primary:hover {
+            background: #2bc9b1;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #ffca58;
+            color: #07192f;
+        }
+        
+        .btn-secondary:hover {
+            background: #f0b84a;
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            background: #ff6b6b;
+            color: #ffffff;
+        }
+        
+        .search-section {
+            margin-bottom: 2rem;
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 12px;
+        }
+        
+        .search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        
+        .search-input:focus {
+            outline: none;
+        }
+        
+        .table-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background: rgba(51, 224, 196, 0.1);
+            font-weight: 600;
+            color: #33e0c4;
+        }
+        
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background: rgba(51, 224, 196, 0.2);
+            color: #33e0c4;
+        }
+        
+        .status-pending {
+            background: rgba(255, 202, 88, 0.2);
+            color: #ffca58;
+        }
+        
+        .status-crisis {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+        
+        .footer {
+            background: #07192f;
+            padding: 1.5rem 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #33e0c4;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .alert-info {
+            background: rgba(51, 224, 196, 0.1);
+            border: 1px solid rgba(51, 224, 196, 0.3);
+            color: #33e0c4;
+        }
+        
+        .alert-warning {
+            background: rgba(255, 202, 88, 0.1);
+            border: 1px solid rgba(255, 202, 88, 0.3);
+            color: #ffca58;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-tabs {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Mental Health Care Management</div>
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-indicator"></div>
+                    IGM Status: Active
+                </div>
+                <div class="status-item">
+                    <div class="status-indicator"></div>
+                    System: Online
+                </div>
+            </div>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" onclick="showTab('dashboard')">Dashboard</button>
+                <button class="nav-tab" onclick="showTab('intake')">Intake Form</button>
+                <button class="nav-tab" onclick="showTab('contact')">Contact Log</button>
+                <button class="nav-tab" onclick="showTab('search')">Search</button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="main-content active">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Active Cases</div>
+                    </div>
+                    <div class="metric">247</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 78%;"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Crisis Interventions</div>
+                    </div>
+                    <div class="metric">12</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 35%;"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Treatment Plans</div>
+                    </div>
+                    <div class="metric">189</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 92%;"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Insurance Audits</div>
+                    </div>
+                    <div class="metric">34</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 68%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-info">
+                <div>📊</div>
+                <div>Weekly outcome reporting due in 2 days. 23 cases pending review.</div>
+            </div>
+            
+            <div class="form-section">
+                <div class="form-title">Recent Activity</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>Clinician</th>
+                                <th>Last Contact</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sarah Johnson</td>
+                                <td>Dr. Martinez</td>
+                                <td>2024-01-15</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td><button class="btn btn-primary">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>Michael Chen</td>
+                                <td>Dr. Thompson</td>
+                                <td>2024-01-14</td>
+                                <td><span class="status-badge status-crisis">Crisis</span></td>
+                                <td><button class="btn btn-danger">Urgent</button></td>
+                            </tr>
+                            <tr>
+                                <td>Emma Rodriguez</td>
+                                <td>Dr. Williams</td>
+                                <td>2024-01-13</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td><button class="btn btn-secondary">Follow-up</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Intake Form Tab -->
+        <div id="intake" class="main-content">
+            <div class="form-section">
+                <div class="form-title">Client Intake Form</div>
+                <div class="alert alert-warning">
+                    <div>⚠️</div>
+                    <div>All fields marked with * are required for insurance compliance</div>
+                </div>
+                <form>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName">First Name *</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="Enter first name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Enter last name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="dateOfBirth">Date of Birth *</label>
+                            <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="socialSecurity">Social Security Number *</label>
+                            <input type="text" id="socialSecurity" name="socialSecurity" placeholder="XXX-XX-XXXX" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phoneNumber">Phone Number *</label>
+                            <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="(555) 123-4567" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="client@example.com">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="address">Home Address *</label>
+                            <textarea id="address" name="address" placeholder="Enter complete address" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="emergencyContact">Emergency Contact Name *</label>
+                            <input type="text" id="emergencyContact" name="emergencyContact" placeholder="Contact name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="emergencyPhone">Emergency Contact Phone *</label>
+                            <input type="tel" id="emergencyPhone" name="emergencyPhone" placeholder="(555) 123-4567" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="insuranceProvider">Insurance Provider *</label>
+                            <select id="insuranceProvider" name="insuranceProvider" required>
+                                <option value="">Select provider</option>
+                                <option value="medicaid">Medicaid</option>
+                                <option value="medicare">Medicare</option>
+                                <option value="bcbs">Blue Cross Blue Shield</option>
+                                <option value="aetna">Aetna</option>
+                                <option value="united">UnitedHealth</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
